@@ -3,8 +3,8 @@ from io import open
 
 setup(
     name='lemiknow',
-    version='0.0.2',
-    description='Let\'s you know when your function call ends or crashes',
+    version='0.0.4',
+    description='Let\'s you know when your function is called, ends or crashes',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/nachotp/lemiknow',
@@ -20,7 +20,12 @@ setup(
     zip_safe=False,
     python_requires='>=3.6',
     install_requires=[
+        'yagmail>=0.11.214',
+        'keyring',
+        'matrix_client',
         'python-telegram-bot',
+        'requests',
+        'twilio'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',

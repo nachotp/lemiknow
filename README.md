@@ -1,4 +1,4 @@
-# Le Mi Know (when it's done)
+# Le Mi Know (when it runs)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/lemiknow)](https://pepy.tech/project/lemiknow) [![Downloads](https://pepy.tech/badge/lemiknow/month)](https://pepy.tech/project/lemiknow/month) [![GitHub stars](https://img.shields.io/github/stars/nachotp/lemiknow.svg?style=social&label=Star&maxAge=1000)](https://github.com/nachotp/lemiknow/stargazers/)
 
 A small library that extends on [knockknock](https://github.com/huggingface/knockknock) to get a notification when your function call starts, finishes, or when it crashes during the process with two additional lines of code.

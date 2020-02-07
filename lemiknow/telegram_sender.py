@@ -22,8 +22,20 @@ def telegram_sender(token: str, chat_id: int, message: str = None, notify_end: b
         Visit https://api.telegram.org/bot<YourBOTToken>/getUpdates to get your chat_id
         (start a conversation with your bot by sending a message and get the `int` under
         message['chat']['id'])
+    `message`: str
+        Optional message to include when notifying the function call.
+        default: None
+    `notify_end`: bool
+        Send a notification when the function finishes (not recommended for short calls).
+        default: True
+    `include_details`: bool
+        Adds extra information on notifications like hostname, start time, etc.
+        Can't be False if message is None.
+        default: true
+    `debug`: bool
+        Prints debug information on console
+        default: False
     """
-
     bot = telegram.Bot(token=token)
 
     def decorator_sender(func):
@@ -36,7 +48,6 @@ def telegram_sender(token: str, chat_id: int, message: str = None, notify_end: b
             start_time = datetime.datetime.now()
             host_name = socket.gethostname()
             func_name = func.__name__
-
             text = ""
             if include_details:
                 text += f'{func_name} called on {host_name} at {start_time.strftime(DATE_FORMAT)}'
