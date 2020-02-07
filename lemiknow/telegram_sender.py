@@ -69,7 +69,7 @@ def telegram_sender(token: str, chat_id: int, message: str = None, notify_end: b
             except Exception as ex:
                 end_time = datetime.datetime.now()
                 elapsed_time = end_time - start_time
-                contents = [f"☠️ {func_name} has crashed on {host_name} at {end_time.strftime(DATE_FORMAT)}',
+                contents = [f"☠️ {func_name} has crashed on {host_name} at {end_time.strftime(DATE_FORMAT)}",
                             "Here's the error:",
                             '%s\n\n' % ex,
                             "Traceback:",
