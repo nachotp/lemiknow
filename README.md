@@ -23,7 +23,7 @@ There are currently *eight* ways to setup notifications:
 | Platform | Original External Contributors | Updated & Tested |
 |:---:|:---:|:---:|
 | [email](#email) | - | No |
-| [Slack](#slack) | - | No |
+| [Slack](#slack) | - | Yes |
 | [Telegram](#telegram) | - | Yes |
 | [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) | No |
 | [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) | No |
