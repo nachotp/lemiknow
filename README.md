@@ -20,16 +20,71 @@ The library is designed to be used in a seamless way, with minimal code modifica
     
 There are currently *eight* ways to setup notifications:
 
-| Platform | External Contributors |
-|:---:|:---:|
-| [email](#email) | - |
-| [Slack](#slack) | - |
-| [Telegram](#telegram) | - |
-| [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) |
-| [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) |
-| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) |
-| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) |
-| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) |
+| Platform | Original External Contributors | Updated & Tested |
+|:---:|:---:|:---:|
+| [email](#email) | - | No |
+| [Slack](#slack) | - | No |
+| [Telegram](#telegram) | - | Yes |
+| [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) | No |
+| [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) | No |
+| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) | Yes |
+| [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) | No |
+| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) | Yes |
+
+## Seting up notifications
+
+Every decorator works the same way but some may require different parameters. Here is a dummy example to show the usual scenario
+
+```python
+from lemiknow import fake_sender
+
+@fake_sender(webhook="<your_webhook_url>", message=None, notify_end=True, include_details=True)
+def function_call(parameters):
+    import time
+    time.sleep(10)
+    return "Success" # Optional return value
+```
+Every decorator has the following three optional paramenters:
+```
+message: str
+    Optional message to include when notifying the function call.
+    default: None
+notify_end: bool
+    Send a notification when the function finishes (not recommended for short calls).
+    default: True
+include_details: bool
+    Adds extra information on notifications like hostname, start time, etc.
+    Can't be False if message is None.
+    default: True
+```
+
+### Telegram
+
+You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
+
+Telegram bots are shy and can't send the first message so you'll have to do the first step. By sending the first message, you'll be able to get the `chat_id` required (identification of your messaging room) by visiting `https://api.telegram.org/bot<YourBOTToken>/getUpdates` and get the `int` under the key `message['chat']['id']`.
+
+#### Python
+
+```python
+from lemiknow import telegram_sender
+
+CHAT_ID: int = <your_messaging_room_id>
+@telegram_sender(token="<your_api_token>", chat_id=CHAT_ID)
+def train_your_nicest_model(your_nicest_parameters):
+    import time
+    time.sleep(10000)
+    return {'loss': 0.9} # Optional return value
+```
+
+#### Command-line
+
+```bash
+lemiknow telegram \
+    --token <your_api_token> \
+    --chat-id <your_messaging_room_id> \
+    sleep 10
+```
 
 ### Email
 
@@ -90,35 +145,6 @@ lemiknow slack \
 ```
 
 You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
-
-
-### Telegram
-
-You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
-
-Telegram bots are shy and can't send the first message so you'll have to do the first step. By sending the first message, you'll be able to get the `chat_id` required (identification of your messaging room) by visiting `https://api.telegram.org/bot<YourBOTToken>/getUpdates` and get the `int` under the key `message['chat']['id']`.
-
-#### Python
-
-```python
-from lemiknow import telegram_sender
-
-CHAT_ID: int = <your_messaging_room_id>
-@telegram_sender(token="<your_api_token>", chat_id=CHAT_ID)
-def train_your_nicest_model(your_nicest_parameters):
-    import time
-    time.sleep(10000)
-    return {'loss': 0.9} # Optional return value
-```
-
-#### Command-line
-
-```bash
-lemiknow telegram \
-    --token <your_api_token> \
-    --chat-id <your_messaging_room_id> \
-    sleep 10
-```
 
 
 ### Microsoft Teams

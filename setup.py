@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='lemiknow',
-    version='0.0.6',
+    version='0.0.7',
     description='Let\'s you know when your function is called, ends or crashes',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
@@ -22,16 +22,17 @@ setup(
     install_requires=[
         'yagmail>=0.11.214',
         'keyring',
+        'keyrings.alt==3.1.1',
         'matrix_client',
         'python-telegram-bot',
         'requests',
         'twilio'
     ],
     classifiers=[
-        'Intended Audience :: Science/Research',
+        'Intended Audience :: Developers',
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Communications',
     ]
 )

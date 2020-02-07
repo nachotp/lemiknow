@@ -6,7 +6,7 @@ from lemiknow import email_sender, slack_sender, telegram_sender, teams_sender, 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="lemiknow - Be notified when your training is complete.")
+        description="lemiknow - Be notified when your function is complete.")
     parser.add_argument("--verbose", required=False, action="store_true",
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
@@ -16,7 +16,13 @@ def main():
         name="desktop", description="Send a desktop notification before and after function " +
         "execution, with start and end status (successfully or crashed).")
     desktop_parser.add_argument("--title", type=str, required=False,
-                                help="The title of the notification, default to lemiknow")
+                                help="The title of the notification, default to Lemiknow")
+    desktop_parser.add_argument("--message", type=str, required=False,
+                                help="Add a custom message for the notificacion text, default to None")
+    desktop_parser.add_argument("--notify_end", type=bool, required=False,
+                                help="Sends a notification when the function finishes, default to True")
+    desktop_parser.add_argument("--include_details", type=bool, required=False,
+                                help="Adds technical information when notifying function calls, default to True")
     desktop_parser.set_defaults(sender_func=desktop_sender)
 
     # Discord
@@ -26,6 +32,12 @@ def main():
     discord_parser.add_argument(
         "--webhook-url", type=str, required=True,
         help="The webhook URL to access your Discord server/channel.")
+    discord_parser.add_argument("--message", type=str, required=False
+                                help="Add a custom message for the notificacion text, default to None")
+    discord_parser.add_argument("--notify_end", type=bool, required=False
+                                help="Sends a notification when the function finishes, default to True")
+    discord_parser.add_argument("--include_details", type=bool, required=False,
+                                help="Adds technical information when notifying function calls, default to True")
     discord_parser.set_defaults(sender_func=discord_sender)
 
     # Email
@@ -65,6 +77,13 @@ def main():
     telegram_parser.add_argument(
         "--chat-id", type=int, required=True,
         help="Your chat room id with your notification BOT.")
+
+    telegram_parser.add_argument("--message", type=str, required=False,
+                                 help="Add a custom message for the notificacion text, default to None")
+    telegram_parser.add_argument("--notify_end", type=bool, required=False,
+                                 help="Sends a notification when the function finishes, default to True")
+    telegram_parser.add_argument("--include_details", type=bool, required=False,
+                                 help="Adds technical information when notifying function calls, default to True")
     telegram_parser.set_defaults(sender_func=telegram_sender)
 
     # Teams
