@@ -7,6 +7,7 @@ from matrix_client.api import MatrixHttpApi
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+
 def matrix_sender(homeserver: str, token: str, room: str):
     """
     Matrix sender wrapper: execute func, send a Matrix message with the end status
@@ -32,72 +33,55 @@ def matrix_sender(homeserver: str, token: str, room: str):
     room_id = matrix.get_room_id(room)
 
     def decorator_sender(func):
+
+        def send_message(text, room_id=room_id):
+            matrix.send_message(room_id, text)
+
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
 
             start_time = datetime.datetime.now()
             host_name = socket.gethostname()
             func_name = func.__name__
+            text = ""
+            if include_details:
+                text += f'{func_name} called on {host_name} at {start_time.strftime(DATE_FORMAT)}'
+            if message:
+                text += f'{func_name}: {message}' if not include_details else f'\nMessage: {message}'
+            if notify_end:
+                text += '\nWe\'ll let you know when it\'s done.'
 
-            # Handling distributed training edge case.
-            # In PyTorch, the launch of `torch.distributed.launch` sets up a RANK environment variable for each process.
-            # This can be used to detect the master process.
-            # See https://github.com/pytorch/pytorch/blob/master/torch/distributed/launch.py#L211
-            # Except for errors, only the master process will send notifications.
-            if 'RANK' in os.environ:
-                master_process = (int(os.environ['RANK']) == 0)
-                host_name += ' - RANK: %s' % os.environ['RANK']
-            else:
-                master_process = True
-
-            if master_process:
-                contents = ['Your training has started 🎬',
-                            'Machine name: %s' % host_name,
-                            'Main call: %s' % func_name,
-                            'Starting date: %s' % start_time.strftime(DATE_FORMAT)]
-                text = '\n'.join(contents)
-
-                matrix.send_message(room_id, text)
+            send_message(text=text)
 
             try:
                 value = func(*args, **kwargs)
-
-                if master_process:
+                if notify_end:
                     end_time = datetime.datetime.now()
                     elapsed_time = end_time - start_time
-                    contents = ["Your training is complete 🎉",
-                                'Machine name: %s' % host_name,
-                                'Main call: %s' % func_name,
-                                'Starting date: %s' % start_time.strftime(DATE_FORMAT),
-                                'End date: %s' % end_time.strftime(DATE_FORMAT),
-                                'Training duration: %s' % str(elapsed_time)]
+                    text = ""
+                    text += f'✅ {func_name} finished on {host_name} at {end_time.strftime(DATE_FORMAT)}'
+                    text += f'\nDuration: {elapsed_time}'
 
                     try:
                         str_value = str(value)
-                        contents.append('Main call returned value: %s'% str_value)
+                        text += f'\nReturned value: {str_value}'
                     except:
-                        contents.append('Main call returned value: %s'% "ERROR - Couldn't str the returned value.")
+                        text += f'\nReturned value: ERROR - Couldn\'t parse the returned value.'
 
-                    text = '\n'.join(contents)
-                    matrix.send_message(room_id, text)
+                    send_message(text=text)
 
                 return value
 
             except Exception as ex:
                 end_time = datetime.datetime.now()
                 elapsed_time = end_time - start_time
-                contents = ["Your training has crashed ☠️",
-                            'Machine name: %s' % host_name,
-                            'Main call: %s' % func_name,
-                            'Starting date: %s' % start_time.strftime(DATE_FORMAT),
-                            'Crash date: %s' % end_time.strftime(DATE_FORMAT),
-                            'Crashed training duration: %s\n\n' % str(elapsed_time),
+                contents = [f"☠️ {func_name} has crashed on {host_name} at {end_time.strftime(DATE_FORMAT)}",
                             "Here's the error:",
                             '%s\n\n' % ex,
                             "Traceback:",
                             '%s' % traceback.format_exc()]
                 text = '\n'.join(contents)
-                matrix.send_message(room_id, text)
+                send_message(text=text)
                 raise ex
 
         return wrapper_sender

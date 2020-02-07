@@ -47,7 +47,7 @@ def discord_sender(webhook_url: str, message: str = None, notify_end: bool = Tru
             if include_details:
                 text += f'{func_name} called on {host_name} at {start_time.strftime(DATE_FORMAT)}'
             if message:
-                text += f'{message}' if not include_details else f'\nMessage: {message}'
+                text += f'{func_name}: {message}' if not include_details else f'\nMessage: {message}'
             if notify_end:
                 text += '\nWe\'ll let you know when it\'s done.'
 

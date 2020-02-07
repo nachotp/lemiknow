@@ -52,7 +52,7 @@ def telegram_sender(token: str, chat_id: int, message: str = None, notify_end: b
             if include_details:
                 text += f'{func_name} called on {host_name} at {start_time.strftime(DATE_FORMAT)}'
             if message:
-                text += f'{message}' if not include_details else f'\nMessage: {message}'
+                text += f'{func_name}: {message}' if not include_details else f'\nMessage: {message}'
             if notify_end:
                 text += '\nWe\'ll let you know when it\'s done.'
 
