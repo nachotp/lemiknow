@@ -17,7 +17,7 @@ This code has only been tested with Python >= 3.6.
 ## Usage
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
-
+    
 There are currently *eight* ways to setup notifications:
 
 | Platform | External Contributors |
@@ -259,9 +259,3 @@ lemiknow matrix \
     --room <room> \
     sleep 10
 ```
-
-## Note on distributed training
-
-When using distributed training, a GPU is bound to its process using the local rank variable. Since lemiknow works at the process level, if you are using 8 GPUs, you would get 8 notifications at the beginning and 8 notifications at the end... To circumvent that, except for errors, only the master process is allowed to send notifications so that you receive only one notification at the beginning and one notification at the end.
-
-**Note:** _In PyTorch, the launch of `torch.distributed.launch` sets up a RANK environment variable for each process (see [here](https://github.com/pytorch/pytorch/blob/master/torch/distributed/launch.py#L211)). This is used to detect the master process, and for now, the only simple way I came up with. Unfortunately, this is not intended to be general for all platforms but I would happily discuss smarter/better ways to handle distributed training in an issue/PR._
