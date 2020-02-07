@@ -1,9 +1,9 @@
 # Le Mi Know (when it's done)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/lemiknow)](https://pepy.tech/project/lemiknow) [![Downloads](https://pepy.tech/badge/lemiknow/month)](https://pepy.tech/project/lemiknow/month) [![GitHub stars](https://img.shields.io/github/stars/nachotp/lemiknow.svg?style=social&label=Star&maxAge=1000)](https://github.com/nachotp/lemiknow/stargazers/)
 
-A small library that extends on [knockknock](https://github.com/huggingface/knockknock) to get a notification when your function call is complete or when it crashes during the process with two additional lines of code.
+A small library that extends on [knockknock](https://github.com/huggingface/knockknock) to get a notification when your function call starts, finishes, or when it crashes during the process with two additional lines of code.
 
-When training deep learning models, it is common to use early stopping. Apart from a rough estimate, it is difficult to predict when the training will finish. Thus, it can be interesting to set up automatic notifications for your training. It is also interesting to be notified when your training crashes in the middle of the process for unexpected reasons.
+Say goodbye to the guessing game, lemiknow will let you know what you need to know, when you need to know.
 
 ## Installation
 
