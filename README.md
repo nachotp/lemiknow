@@ -1,5 +1,5 @@
-# Knock Knock
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/knockknock)](https://pepy.tech/project/knockknock) [![Downloads](https://pepy.tech/badge/knockknock/month)](https://pepy.tech/project/knockknock/month) [![GitHub stars](https://img.shields.io/github/stars/huggingface/knockknock.svg?style=social&label=Star&maxAge=1000)](https://github.com/huggingface/knockknock/stargazers/)
+    # Le Mi Know (when it's done)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/lemiknow)](https://pepy.tech/project/lemiknow) [![Downloads](https://pepy.tech/badge/lemiknow/month)](https://pepy.tech/project/lemiknow/month) [![GitHub stars](https://img.shields.io/github/stars/nachotp/lemiknow.svg?style=social&label=Star&maxAge=1000)](https://github.com/nachotp/lemiknow/stargazers/)
 
 A small library to get a notification when your training is complete or when it crashes during the process with two additional lines of code.
 
@@ -9,7 +9,7 @@ When training deep learning models, it is common to use early stopping. Apart fr
 
 Install with `pip` or equivalent.
 ```bash
-pip install knockknock
+pip install lemiknow
 ```
 
 This code has only been tested with Python >= 3.6.
@@ -38,7 +38,7 @@ The service relies on [Yagmail](https://github.com/kootenpv/yagmail) a GMAIL/SMT
 #### Python
 
 ```python
-from knockknock import email_sender
+from lemiknow import email_sender
 
 @email_sender(recipient_emails=["<your_email@address.com>", "<your_second_email@address.com>"], sender_email="<grandma's_email@gmail.com>")
 def train_your_nicest_model(your_nicest_parameters):
@@ -50,7 +50,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock email \
+lemiknow email \
     --recipient-emails <your_email@address.com>,<your_second_email@address.com> \
     --sender-email <grandma's_email@gmail.com> \
     sleep 10
@@ -68,7 +68,7 @@ Similarly, you can also use Slack to get notifications. You'll have to get your 
 #### Python
 
 ```python
-from knockknock import slack_sender
+from lemiknow import slack_sender
 
 webhook_url = "<webhook_url_to_your_slack_room>"
 @slack_sender(webhook_url=webhook_url, channel="<your_favorite_slack_channel>")
@@ -83,7 +83,7 @@ You can also specify an optional argument to tag specific people: `user_mentions
 #### Command-line
 
 ```bash
-knockknock slack \
+lemiknow slack \
     --webhook-url <webhook_url_to_your_slack_room> \
     --channel <your_favorite_slack_channel> \
     sleep 10
@@ -101,7 +101,7 @@ Telegram bots are shy and can't send the first message so you'll have to do the 
 #### Python
 
 ```python
-from knockknock import telegram_sender
+from lemiknow import telegram_sender
 
 CHAT_ID: int = <your_messaging_room_id>
 @telegram_sender(token="<your_api_token>", chat_id=CHAT_ID)
@@ -114,7 +114,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock telegram \
+lemiknow telegram \
     --token <your_api_token> \
     --chat-id <your_messaging_room_id> \
     sleep 10
@@ -128,7 +128,7 @@ Thanks to [@noklam](https://github.com/noklam), you can also use Microsoft Teams
 #### Python
 
 ```python
-from knockknock import teams_sender
+from lemiknow import teams_sender
 
 @teams_sender(token="<webhook_url_to_your_teams_channel>")
 def train_your_nicest_model(your_nicest_parameters):
@@ -140,7 +140,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock teams \
+lemiknow teams \
     --webhook-url <webhook_url_to_your_teams_channel> \
     sleep 10
 ```
@@ -155,7 +155,7 @@ Thanks to [@abhishekkrthakur](https://github.com/abhishekkrthakur), you can use 
 #### Python
 
 ```python
-from knockknock import sms_sender
+from lemiknow import sms_sender
 
 ACCOUNT_SID: str = "<your_account_sid>"
 AUTH_TOKEN: str = "<your_auth_token>"
@@ -169,7 +169,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock sms \
+lemiknow sms \
     --account-sid <your_account_sid> \
     --auth-token <your_account_auth_token> \
     --recipient-number <recipient_number> \
@@ -184,7 +184,7 @@ Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to 
 #### Python
 
 ```python
-from knockknock import discord_sender
+from lemiknow import discord_sender
 
 webhook_url = "<webhook_url_to_your_discord_channel>"
 @discord_sender(webhook_url=webhook_url)
@@ -197,7 +197,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock discord \
+lemiknow discord \
     --webhook-url <webhook_url_to_your_discord_channel> \
     sleep 10
 ```
@@ -209,9 +209,9 @@ You can also get notified from a desktop notification. It is currently only avai
 #### Python
 
 ```python
-from knockknock import desktop_sender
+from lemiknow import desktop_sender
 
-@desktop_sender(title="Knockknock Desktop Notifier")
+@desktop_sender(title="lemiknow Desktop Notifier")
 def train_your_nicest_model(your_nicest_parameters):
     import time
     time.sleep(10000)
@@ -220,8 +220,8 @@ def train_your_nicest_model(your_nicest_parameters):
 
 #### Command Line
 ```bash
-knockknock desktop \
-    --title 'Knockknock Desktop Notifier' \
+lemiknow desktop \
+    --title 'lemiknow Desktop Notifier' \
     sleep 2
 ```
 
@@ -237,11 +237,11 @@ settings under `Room Addresses` and add an alias.
 #### Python
 
 ```python
-from knockknock import matrix_sender
+from lemiknow import matrix_sender
 
 HOMESERVER = "<url_to_your_home_server>" # e.g. https://matrix.org
 TOKEN = "<your_auth_token>"              # e.g. WiTyGizlr8ntvBXdFfZLctyY
-ROOM = "<room_alias"                     # e.g. #knockknock:matrix.org
+ROOM = "<room_alias"                     # e.g. #lemiknow:matrix.org
 
 @matrix_sender(homeserver=HOMESERVER, token=TOKEN, room=ROOM)
 def train_your_nicest_model(your_nicest_parameters):
@@ -253,7 +253,7 @@ def train_your_nicest_model(your_nicest_parameters):
 #### Command-line
 
 ```bash
-knockknock matrix \
+lemiknow matrix \
     --homeserver <homeserver> \
     --token <token> \
     --room <room> \
@@ -262,6 +262,6 @@ knockknock matrix \
 
 ## Note on distributed training
 
-When using distributed training, a GPU is bound to its process using the local rank variable. Since knockknock works at the process level, if you are using 8 GPUs, you would get 8 notifications at the beginning and 8 notifications at the end... To circumvent that, except for errors, only the master process is allowed to send notifications so that you receive only one notification at the beginning and one notification at the end.
+When using distributed training, a GPU is bound to its process using the local rank variable. Since lemiknow works at the process level, if you are using 8 GPUs, you would get 8 notifications at the beginning and 8 notifications at the end... To circumvent that, except for errors, only the master process is allowed to send notifications so that you receive only one notification at the beginning and one notification at the end.
 
 **Note:** _In PyTorch, the launch of `torch.distributed.launch` sets up a RANK environment variable for each process (see [here](https://github.com/pytorch/pytorch/blob/master/torch/distributed/launch.py#L211)). This is used to detect the master process, and for now, the only simple way I came up with. Unfortunately, this is not intended to be general for all platforms but I would happily discuss smarter/better ways to handle distributed training in an issue/PR._

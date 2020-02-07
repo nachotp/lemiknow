@@ -1,25 +1,25 @@
 import argparse
 import subprocess
 
-from knockknock import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
+from lemiknow import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="KnockKnock - Be notified when your training is complete.")
+        description="lemiknow - Be notified when your training is complete.")
     parser.add_argument("--verbose", required=False, action="store_true",
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
 
-    ## Desktop
+    # Desktop
     desktop_parser = subparsers.add_parser(
         name="desktop", description="Send a desktop notification before and after function " +
         "execution, with start and end status (successfully or crashed).")
     desktop_parser.add_argument("--title", type=str, required=False,
-        help="The title of the notification, default to knockknock")
+                                help="The title of the notification, default to lemiknow")
     desktop_parser.set_defaults(sender_func=desktop_sender)
-    
-    ## Discord
+
+    # Discord
     discord_parser = subparsers.add_parser(
         name="discord", description="Send a Discord message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -28,7 +28,7 @@ def main():
         help="The webhook URL to access your Discord server/channel.")
     discord_parser.set_defaults(sender_func=discord_sender)
 
-    ## Email
+    # Email
     email_parser = subparsers.add_parser(
         name="email", description="Send an email before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -41,7 +41,7 @@ def main():
         "(default: use the same address as the first email in `recipient-emails`)")
     email_parser.set_defaults(sender_func=email_sender)
 
-    ## Slack
+    # Slack
     slack_parser = subparsers.add_parser(
         name="slack", description="Send a Slack message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -55,7 +55,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     slack_parser.set_defaults(sender_func=slack_sender)
 
-    ## Telegram
+    # Telegram
     telegram_parser = subparsers.add_parser(
         name="telegram", description="Send a Telegram message before and after " +
         "function execution, with start and end status (sucessfully or crashed).")
@@ -67,7 +67,7 @@ def main():
         help="Your chat room id with your notification BOT.")
     telegram_parser.set_defaults(sender_func=telegram_sender)
 
-    ## Teams
+    # Teams
     teams_parser = subparsers.add_parser(
         name="teams", description="Send a teams message before and after function " +
         "execution, with start and end status (sucessfully or crashed).")
@@ -79,7 +79,7 @@ def main():
         help="Optional user ids to notify, as comma seperated list.")
     teams_parser.set_defaults(sender_func=teams_sender)
 
-    ## SMS
+    # SMS
     sms_parser = subparsers.add_parser(
         name="sms", description="Send an SMS using the Twilio API")
     sms_parser.add_argument(
@@ -96,7 +96,7 @@ def main():
         help="The phone number of the sender (Twilio number).")
     sms_parser.set_defaults(sender_func=sms_sender)
 
-    ## Matrix
+    # Matrix
     matrix_parser = subparsers.add_parser(
         name="matrix", description="Send a Matrix message before and after " +
         "function execution, with start and end status (sucessfully or crashed).")

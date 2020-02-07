@@ -6,7 +6,7 @@ import socket
 import subprocess
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
-def desktop_sender(title:str="knockknock"):
+def desktop_sender(title:str="lemiknow"):
     
     def show_notification(text:str,title:str):
         subprocess.run(["sh", "-c", "osascript -e 'display notification \"%s\" with title \"%s\"'" % (text, title)])

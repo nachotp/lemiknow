@@ -2,30 +2,25 @@ from setuptools import setup, find_packages
 from io import open
 
 setup(
-    name='knockknock',
-    version='0.1.7',
-    description='Be notified when your training is complete with only two additional lines of code',
+    name='lemiknow',
+    version='0.0.1',
+    description='Let\'s you know when your function call ends or crashes',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
-    url='http://github.com/huggingface/knockknock',
-    author='Victor SANH',
-    author_email='victorsanh@gmail.com',
+    url='https://github.com/nachotp/lemiknow',
+    author='Ignacio Tampe',
+    author_email='thenachotp@gmail.com',
     license='MIT',
     packages=find_packages(),
         entry_points={
             'console_scripts': [
-                'knockknock = knockknock.__main__:main'
+                'lemiknow = lemiknow.__main__:main'
             ]
     },
     zip_safe=False,
     python_requires='>=3.6',
     install_requires=[
-        'yagmail>=0.11.214',
-        'keyring',
-        'matrix_client',
         'python-telegram-bot',
-        'requests',
-        'twilio'
     ],
     classifiers=[
         'Intended Audience :: Science/Research',
