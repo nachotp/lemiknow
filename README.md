@@ -1,7 +1,7 @@
 # Le Mi Know (when it runs)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-red.svg)](#python) [![Downloads](https://pepy.tech/badge/lemiknow)](https://pepy.tech/project/lemiknow) [![Downloads](https://pepy.tech/badge/lemiknow/month)](https://pepy.tech/project/lemiknow/month) [![GitHub stars](https://img.shields.io/github/stars/nachotp/lemiknow.svg?style=social&label=Star&maxAge=1000)](https://github.com/nachotp/lemiknow/stargazers/)
 
-A small library that extends on [knockknock](https://github.com/huggingface/knockknock) to get a notification when your function call starts, finishes, or when it crashes during the process with two additional lines of code.
+A small library based on [knockknock](https://github.com/huggingface/knockknock) to get a notification when your function call starts, finishes, or when it crashes during the process with two additional lines of code.
 
 Say goodbye to the guessing game, lemiknow will let you know what you need to know, when you need to know.
 
@@ -18,18 +18,24 @@ This code has only been tested with Python >= 3.6.
 
 The library is designed to be used in a seamless way, with minimal code modification: you only need to add a decorator on top your main function call. The return value (if there is one) is also reported in the notification.
     
-There are currently *eight* ways to setup notifications:
+There are currently *four* ways to setup notifications:
 
-| Platform | Original External Contributors | Updated & Tested |
+| Platform | Original External Contributor | Updated & Tested |
 |:---:|:---:|:---:|
-| [email](#email) | - | No |
 | [Slack](#slack) | - | Yes |
 | [Telegram](#telegram) | - | Yes |
+| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) | Yes |
+| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) | Yes |
+
+To be implemented and tested:
+
+| Platform | Original External Contributor | Updated & Tested |
+|:---:|:---:|:---:|
 | [Microsoft Teams](#microsoft-teams) | [@noklam](https://github.com/noklam) | No |
 | [Text Message](#text-message-(sms)) | [@abhishekkrthakur](https://github.com/abhishekkrthakur) | No |
-| [Discord](#discord) | [@watkinsm](https://github.com/watkinsm) | Yes |
+| [email](#email) | - | No |
 | [Desktop](#desktop-notification) | [@atakanyenel](https://github.com/atakanyenel) | No |
-| [Matrix](#matrix) | [@jcklie](https://github.com/jcklie) | Yes |
+
 
 ## Seting up notifications
 
@@ -58,9 +64,33 @@ include_details: bool
     default: True
 ```
 
+### Generic examples:
+
+#### No message on function end and custom message:
+```python
+from lemiknow import fake_sender
+
+message = "This function is fast and doesn't need a notification when it finishes!"
+
+@fake_sender(webhook="<your_webhook_url>", message=message, notify_end=False, include_details=True)
+def function_call(parameters):
+    return "So fast" # Optional return value
+```
+
+#### Send only custom message:
+```python
+from lemiknow import fake_sender
+
+message = "I don't need every detail included for this notification"
+
+@fake_sender(webhook="<your_webhook_url>", message=message, notify_end=False, include_details=False)
+def function_call(parameters):
+    return "So little detail" # Optional return value
+```
+
 ### Telegram
 
-You can also use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
+You can use Telegram Messenger to get notifications. You'll first have to create your own notification bot by following the three steps provided by Telegram [here](https://core.telegram.org/bots#6-botfather) and save your API access `TOKEN`.
 
 Telegram bots are shy and can't send the first message so you'll have to do the first step. By sending the first message, you'll be able to get the `chat_id` required (identification of your messaging room) by visiting `https://api.telegram.org/bot<YourBOTToken>/getUpdates` and get the `int` under the key `message['chat']['id']`.
 
@@ -71,10 +101,10 @@ from lemiknow import telegram_sender
 
 CHAT_ID: int = <your_messaging_room_id>
 @telegram_sender(token="<your_api_token>", chat_id=CHAT_ID)
-def train_your_nicest_model(your_nicest_parameters):
+def function_call(parameters):
     import time
-    time.sleep(10000)
-    return {'loss': 0.9} # Optional return value
+    time.sleep(10)
+    return "Success" # Optional return value # Optional return value
 ```
 
 #### Command-line
@@ -127,10 +157,10 @@ from lemiknow import slack_sender
 
 webhook_url = "<webhook_url_to_your_slack_room>"
 @slack_sender(webhook_url=webhook_url, channel="<your_favorite_slack_channel>")
-def train_your_nicest_model(your_nicest_parameters):
+def function_call(parameters):
     import time
-    time.sleep(10000)
-    return {'loss': 0.9} # Optional return value
+    time.sleep(10)
+    return "Success" # Optional return value # Optional return value
 ```
 
 You can also specify an optional argument to tag specific people: `user_mentions=[<your_slack_id>, <grandma's_slack_id>]`.
@@ -146,6 +176,68 @@ lemiknow slack \
 
 You can also specify an optional argument to tag specific people: `--user-mentions <your_slack_id>,<grandma's_slack_id>`.
 
+
+### Discord
+
+You can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
+
+#### Python
+
+```python
+from lemiknow import discord_sender
+
+webhook_url = "<webhook_url_to_your_discord_channel>"
+@discord_sender(webhook_url=webhook_url)
+def function_call(parameters):
+    import time
+    time.sleep(10)
+    return "Success" # Optional return value
+```
+
+#### Command-line
+
+```bash
+lemiknow discord \
+    --webhook-url <webhook_url_to_your_discord_channel> \
+    sleep 10
+```
+
+### Matrix
+
+[Matrix](https://matrix.org/) is supported for notifications. The homeserver is the 
+server on which your user that will send messages is registered. Do not forget the schema for the URL (`http` or `https`).
+You'll have to get the access token for a bot or your own user. The easiest way to obtain it is to look into Riot looking 
+in the riot settings, `Help & About`, down the bottom is: `Access Token:<click to reveal>`. You also need to specify a 
+room alias to which messages are sent. To obtain the alias in Riot, create a room you want to use, then open the room 
+settings under `Room Addresses` and add an alias.
+
+#### Python
+
+```python
+from lemiknow import matrix_sender
+
+HOMESERVER = "<url_to_your_home_server>" # e.g. https://matrix.org
+TOKEN = "<your_auth_token>"              # e.g. WiTyGizlr8ntvBXdFfZLctyY
+ROOM = "<room_alias"                     # e.g. #lemiknow:matrix.org
+
+@matrix_sender(homeserver=HOMESERVER, token=TOKEN, room=ROOM)
+def function_call(parameters):
+    import time
+    time.sleep(10)
+    return "Success" # Optional return value
+```
+
+#### Command-line
+
+```bash
+lemiknow matrix \
+    --homeserver <homeserver> \
+    --token <token> \
+    --room <room> \
+    sleep 10
+```
+
+## The following options have not been tested and updated (but will in future versions)
 
 ### Microsoft Teams
 
@@ -203,31 +295,6 @@ lemiknow sms \
     sleep 10
 ```
 
-### Discord
-
-Thanks to [@watkinsm](https://github.com/watkinsm), you can also use Discord to get notifications. You'll just have to get your Discord channel's [webhook URL](https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks).
-
-#### Python
-
-```python
-from lemiknow import discord_sender
-
-webhook_url = "<webhook_url_to_your_discord_channel>"
-@discord_sender(webhook_url=webhook_url)
-def train_your_nicest_model(your_nicest_parameters):
-    import time
-    time.sleep(10000)
-    return {'loss': 0.9} # Optional return value
-```
-
-#### Command-line
-
-```bash
-lemiknow discord \
-    --webhook-url <webhook_url_to_your_discord_channel> \
-    sleep 10
-```
-
 ### Desktop Notification
 
 You can also get notified from a desktop notification. It is currently only available for MacOS.
@@ -249,39 +316,4 @@ def train_your_nicest_model(your_nicest_parameters):
 lemiknow desktop \
     --title 'lemiknow Desktop Notifier' \
     sleep 2
-```
-
-### Matrix
-
-Thanks to [@jcklie](https://github.com/jcklie), you can send notifications via [Matrix](https://matrix.org/). The homeserver is the 
-server on which your user that will send messages is registered. Do not forget the schema for the URL (`http` or `https`).
-You'll have to get the access token for a bot or your own user. The easiest way to obtain it is to look into Riot looking 
-in the riot settings, `Help & About`, down the bottom is: `Access Token:<click to reveal>`. You also need to specify a 
-room alias to which messages are sent. To obtain the alias in Riot, create a room you want to use, then open the room 
-settings under `Room Addresses` and add an alias.
-
-#### Python
-
-```python
-from lemiknow import matrix_sender
-
-HOMESERVER = "<url_to_your_home_server>" # e.g. https://matrix.org
-TOKEN = "<your_auth_token>"              # e.g. WiTyGizlr8ntvBXdFfZLctyY
-ROOM = "<room_alias"                     # e.g. #lemiknow:matrix.org
-
-@matrix_sender(homeserver=HOMESERVER, token=TOKEN, room=ROOM)
-def train_your_nicest_model(your_nicest_parameters):
-    import time
-    time.sleep(10000)
-    return {'loss': 0.9} # Optional return value
-```
-
-#### Command-line
-
-```bash
-lemiknow matrix \
-    --homeserver <homeserver> \
-    --token <token> \
-    --room <room> \
-    sleep 10
 ```
