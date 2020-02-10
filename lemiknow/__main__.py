@@ -32,9 +32,9 @@ def main():
     discord_parser.add_argument(
         "--webhook-url", type=str, required=True,
         help="The webhook URL to access your Discord server/channel.")
-    discord_parser.add_argument("--message", type=str, required=False
+    discord_parser.add_argument("--message", type=str, required=False,
                                 help="Add a custom message for the notificacion text, default to None")
-    discord_parser.add_argument("--notify_end", type=bool, required=False
+    discord_parser.add_argument("--notify_end", type=bool, required=False,
                                 help="Sends a notification when the function finishes, default to True")
     discord_parser.add_argument("--include_details", type=bool, required=False,
                                 help="Adds technical information when notifying function calls, default to True")
