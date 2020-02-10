@@ -39,6 +39,9 @@ def discord_sender(webhook_url: str, message: str = None, notify_end: bool = Tru
 
         @functools.wraps(func)
         def wrapper_sender(*args, **kwargs):
+            if (not include_details and message == None) or (not include_details and message == ""):
+                raise ValueError(
+                    "Message cannot be empty if include_details is set to False")
 
             start_time = datetime.datetime.now()
             host_name = socket.gethostname()
