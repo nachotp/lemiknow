@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='lemiknow',
-    version='0.0.9',
+    version='0.1.0',
     description='Let\'s you know when your function is called, ends or crashes',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',

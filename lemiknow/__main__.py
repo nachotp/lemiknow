@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-from lemiknow import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender
+from lemiknow import email_sender, slack_sender, telegram_sender, teams_sender, sms_sender, discord_sender, desktop_sender, matrix_sender, console_sender
 
 
 def main():
@@ -10,6 +10,18 @@ def main():
     parser.add_argument("--verbose", required=False, action="store_true",
                         help="Show full command in notification.")
     subparsers = parser.add_subparsers()
+
+    # Console
+    console_parser = subparsers.add_parser(
+        name="desktop", description="Print on console before and after function " +
+        "execution, with start and end status (successfully or crashed).")
+    console_parser.add_argument("--message", type=str, required=False,
+                                help="Add a custom message for the notificacion text, default to None")
+    console_parser.add_argument("--notify_end", type=bool, required=False,
+                                help="Sends a notification when the function finishes, default to True")
+    console_parser.add_argument("--include_details", type=bool, required=False,
+                                help="Adds technical information when notifying function calls, default to True")
+    console_parser.set_defaults(sender_func=console_sender)
 
     # Desktop
     desktop_parser = subparsers.add_parser(
@@ -65,6 +77,12 @@ def main():
     slack_parser.add_argument(
         "--user-mentions", type=lambda s: s.split(","), required=False, default=[],
         help="Optional user ids to notify, as comma seperated list.")
+    slack_parser.add_argument("--message", type=str, required=False,
+                              help="Add a custom message for the notificacion text, default to None")
+    slack_parser.add_argument("--notify_end", type=bool, required=False,
+                              help="Sends a notification when the function finishes, default to True")
+    slack_parser.add_argument("--include_details", type=bool, required=False,
+                              help="Adds technical information when notifying function calls, default to True")
     slack_parser.set_defaults(sender_func=slack_sender)
 
     # Telegram
@@ -128,6 +146,13 @@ def main():
     matrix_parser.add_argument(
         "--room", type=str, required=True,
         help="The alias of the room to which messages will be send by the BOT.")
+
+    matrix_parser.add_argument("--message", type=str, required=False,
+                               help="Add a custom message for the notificacion text, default to None")
+    matrix_parser.add_argument("--notify_end", type=bool, required=False,
+                               help="Sends a notification when the function finishes, default to True")
+    matrix_parser.add_argument("--include_details", type=bool, required=False,
+                               help="Adds technical information when notifying function calls, default to True")
     matrix_parser.set_defaults(sender_func=matrix_sender)
 
     args, remaining_args = parser.parse_known_args()
